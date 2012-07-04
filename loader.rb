@@ -53,11 +53,11 @@ feed.entries.map do |entry|
 
   if ad.latitude && ad.longitude
     Apartments.add({
-      :url => entry.url,
-      :title => entry.title,
-      :published => entry.published,
-      :lattitude => ad.latitude,
-      :longitude => ad.longitude
+      'url' => entry.url,
+      'title' => entry.title,
+      'published' => entry.published,
+      'lattitude' => ad.latitude,
+      'longitude' => ad.longitude
     })
   end
 end
