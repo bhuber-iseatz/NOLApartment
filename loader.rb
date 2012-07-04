@@ -10,7 +10,8 @@ class CraigsListAd
   def address
     if @street0
       street = @street0
-      street << " & #{@street1}" unless /^\d+ / =~ @street0
+      street << " at #{@street1}" unless /^\d+ / =~ @street0
+
 
       "#{street}, #{@city}, #{@state}"
     end
@@ -19,8 +20,10 @@ class CraigsListAd
   def geocode!
     if self.address
       result = Geocoder.search(self.address).first
-      @latitude = result.latitude
-      @longitude = result.longitude
+      if result
+        @latitude = result.latitude
+        @longitude = result.longitude
+      end
     end
 
     self
@@ -47,9 +50,12 @@ end
 feed = Feedzirra::Feed.fetch_and_parse('neworleans.craigslist.org/apa/index.rss')
 
 feed.entries.map do |entry|
+  puts "parsing: #{entry.url}"
   ad = CraigsListAd.new
   ad.parse(entry.url)
+  puts "geocoding: #{ad.address}"
   ad.geocode!
+  puts "lat/long: #{ad.latitude}, #{ad.longitude}"
 
   if ad.latitude && ad.longitude
     Apartments.add({
