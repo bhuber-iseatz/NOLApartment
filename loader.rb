@@ -56,7 +56,7 @@ feed.entries.map do |entry|
       'url' => entry.url,
       'title' => entry.title,
       'published' => entry.published,
-      'lattitude' => ad.latitude,
+      'latitude' => ad.latitude,
       'longitude' => ad.longitude
     })
   end
