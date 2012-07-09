@@ -10,7 +10,7 @@ class CraigsListAd
   def address
     if @street0
       street = @street0
-      street << " at #{@street1}" unless /^\d+ / =~ @street0
+      street += " at #{@street1}" unless /^\d+ / =~ @street0
 
 
       "#{street}, #{@city}, #{@state}"
