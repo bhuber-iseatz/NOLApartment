@@ -5,7 +5,7 @@ require 'geocoder'
 require_relative 'apartments'
 
 class CraigsListAd
-  attr_accessor :street0, :street1, :city, :state, :latitude, :longitude
+  attr_accessor :street0, :street1, :city, :state, :latitude, :longitude, :rooms
 
   def address
     if @street0
@@ -43,6 +43,10 @@ class CraigsListAd
         @state = $~[:region]
       end
     end
+
+    if doc.css('.posting').text =~ /(?<rooms>\d+)\s?(bed|br|bd)/i
+      @rooms = $~[:rooms]
+    end
   end
 end
 
@@ -56,12 +60,14 @@ feed.entries.map do |entry|
   puts "geocoding: #{ad.address}"
   ad.geocode!
   puts "lat/long: #{ad.latitude}, #{ad.longitude}"
+  puts "rooms #{ad.rooms}"
 
   if ad.latitude && ad.longitude
     Apartments.add({
       'url' => entry.url,
       'title' => entry.title,
       'published' => entry.published,
+      'rooms' => ad.rooms,
       'latitude' => ad.latitude,
       'longitude' => ad.longitude
     })

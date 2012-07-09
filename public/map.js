@@ -14,7 +14,7 @@ $(document).ready(function() {
 
       var marker = new google.maps.Marker({
         position: new google.maps.LatLng(apartment.latitude, apartment.longitude),
-        html: '<a href="' + apartment.url + '" target="_blank">' + apartment.title + '</a>', 
+        html: '<a href="' + apartment.url + '" target="_blank">' + apartment.title + '</a>' + ' rooms: ' + apartment.rooms,
       });
 
       var infowindow = new google.maps.InfoWindow();
