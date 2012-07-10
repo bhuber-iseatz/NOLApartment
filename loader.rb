@@ -5,13 +5,13 @@ require 'geocoder'
 require_relative 'apartments'
 
 class CraigsListAd
-  attr_accessor :street0, :street1, :city, :state, :latitude, :longitude, :beds
+  attr_accessor :street0, :street1, :city, :state, :latitude, :longitude, :beds,
+    :price
 
   def address
     if @street0
       street = @street0
       street += " at #{@street1}" unless /^\d+ / =~ @street0
-
 
       "#{street}, #{@city}, #{@state}"
     end
@@ -20,6 +20,7 @@ class CraigsListAd
   def geocode!
     if self.address
       result = Geocoder.search(self.address).first
+
       if result
         @latitude = result.latitude
         @longitude = result.longitude
@@ -44,8 +45,14 @@ class CraigsListAd
       end
     end
 
-    if doc.css('.posting').text =~ /(?<beds>\d+)\s?(bed|br|bd)/i
+    body = doc.css('.posting').text
+
+    if body =~ /(?<beds>\d+)\s?(bed|br|bd)/i
       @beds = $~[:beds]
+    end
+
+    if body =~/\$(?<price>\d+)/
+      @price = $~[:price]
     end
   end
 end
@@ -61,6 +68,7 @@ feed.entries.map do |entry|
   ad.geocode!
   puts "lat/long: #{ad.latitude}, #{ad.longitude}"
   puts "beds #{ad.beds}"
+  puts "price #{ad.price}"
 
   if ad.latitude && ad.longitude
     Apartments.add({
@@ -68,6 +76,7 @@ feed.entries.map do |entry|
       'title' => entry.title,
       'published' => entry.published,
       'beds' => ad.beds,
+      'price' => ad.price,
       'latitude' => ad.latitude,
       'longitude' => ad.longitude
     })

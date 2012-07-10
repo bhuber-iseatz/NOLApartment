@@ -8,5 +8,5 @@ get '/' do
 end
 
 get '/apartments' do
-  Apartments.all
+  Apartments.all.to_json
 end

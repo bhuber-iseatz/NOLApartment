@@ -43,6 +43,7 @@ PLATFORMS
 DEPENDENCIES
   feedzirra
   geocoder
+  json
   nokogiri
   redis
   sinatra
