@@ -45,12 +45,7 @@ clearMarkers = ->
   markers = []
 
 findApartments = (min_price, max_price, min_beds, max_beds) ->
-  console.log min_price
-  console.log max_price
-  console.log min_beds
-  console.log max_price
   matchingApartment = (a) ->
-    console.log a
     result = true
 
     result = result && a.price >= min_price if min_price
@@ -58,7 +53,6 @@ findApartments = (min_price, max_price, min_beds, max_beds) ->
     result = result && a.beds >= min_beds if min_beds
     result = result && a.beds <= max_beds if max_beds
 
-    console.log result
     result
 
   ( a for a in apartments when matchingApartment a )

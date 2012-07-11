@@ -71,13 +71,8 @@
 
   findApartments = function(min_price, max_price, min_beds, max_beds) {
     var a, matchingApartment, _i, _len, _results;
-    console.log(min_price);
-    console.log(max_price);
-    console.log(min_beds);
-    console.log(max_price);
     matchingApartment = function(a) {
       var result;
-      console.log(a);
       result = true;
       if (min_price) {
         result = result && a.price >= min_price;
@@ -91,7 +86,6 @@
       if (max_beds) {
         result = result && a.beds <= max_beds;
       }
-      console.log(result);
       return result;
     };
     _results = [];
