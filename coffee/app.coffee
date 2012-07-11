@@ -1,3 +1,6 @@
+apartments = []
+markers = []
+map = null
 $ ->
   mapOptions = {
     center: ( new google.maps.LatLng 29.9728, -90.05902 ),
@@ -6,20 +9,56 @@ $ ->
   }
 
   map = new google.maps.Map ( $ '#map_canvas' )[0], mapOptions
-  console.log ( $ '#map_canvas' )
+
   $.getJSON '/apartments', (data) ->
-    for a in data
-      apartment = new Apartment a
+    apartments = ( new Apartment a for a in data )
+    mapApartments(apartments)
 
-      marker = new google.maps.Marker {
-        position: new google.maps.LatLng apartment.latitude, apartment.longitude
-        html: '<a href="' + apartment.url + '" target="_blank">' + apartment.title + '</a>' + ' beds: ' + apartment.beds + 'price: ' + apartment.price
-      }
+  ($ 'button#filter').click ->
+    min_price = ($ '#min-price-input').val()
+    max_price = ($ '#max-price-input').val()
+    min_beds = ($ '#min-beds-input').val()
+    max_beds = ($ '#max-beds-input').val()
+    mapApartments ( findApartments min_price, max_price, min_beds, max_beds )
 
-      infoWindow = new google.maps.InfoWindow()
+mapApartments = (apartments) ->
+  clearMarkers()
+  for apartment in apartments
+    marker = new google.maps.Marker {
+      position: new google.maps.LatLng apartment.latitude, apartment.longitude
+      html: '<a href="' + apartment.url + '" target="_blank">' + apartment.title + '</a>' + ' beds: ' + apartment.beds + 'price: ' + apartment.price
+    }
 
-      marker.setMap map
+    markers.push marker
 
-      google.maps.event.addListener marker, 'click', ->
-        infoWindow.setContent @html
-        infoWindow.open map, this
+    infoWindow = new google.maps.InfoWindow()
+
+    marker.setMap map
+
+    google.maps.event.addListener marker, 'click', ->
+      infoWindow.setContent @html
+      infoWindow.open map, this
+
+clearMarkers = ->
+  for marker in markers
+    marker.setMap null
+  markers = []
+
+findApartments = (min_price, max_price, min_beds, max_beds) ->
+  console.log min_price
+  console.log max_price
+  console.log min_beds
+  console.log max_price
+  matchingApartment = (a) ->
+    console.log a
+    result = true
+
+    result = result && a.price >= min_price if min_price
+    result = result && a.price <= max_price if max_price
+    result = result && a.beds >= min_beds if min_beds
+    result = result && a.beds <= max_beds if max_beds
+
+    console.log result
+    result
+
+  ( a for a in apartments when matchingApartment a )
