@@ -13,18 +13,17 @@
     <script src="/app.js"></script>
   </head>
   <body>
-    <div id="map_canvas"></div>
     <div id="filters">
-      <div>
+      <div class="filter">
         price:
         <span id='price-range' ></span>
-        <div id='price-slider'></div>
+        <div id='price-slider' class='filter-slide'></div>
       </div>
 
-      <div>
+      <div class="filter">
         beds:
         <span id='beds-range' ></span>
-        <div id='beds-slider' ></div>
+        <div id='beds-slider'class='filter-slide'></div>
       </div>
 
       <div class="hidden">
@@ -36,5 +35,6 @@
 
       <button id="filter" type="button" >Filter!</button>
     </div>
+    <div id="map_canvas"></div>
   </body>
 </html>
