@@ -2,11 +2,13 @@
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <link href="/index.css" rel="stylesheet" type="text/css">
+    <link href="/index.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/base/jquery-ui.css" type="text/css" media="all" />
     <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAvIL2g56oknkfO5zsVPL5JZQvebfvl7tI&sensor=false">
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"></script>
     <script src="/apartment.js"></script>
     <script src="/app.js"></script>
   </head>
@@ -14,19 +16,21 @@
     <div id="map_canvas"></div>
     <div id="filters">
       <div>
-        min price:
+        price:
+        <span id='price-range' ></span>
+        <div id='price-slider'></div>
+      </div>
+
+      <div>
+        beds:
+        <span id='beds-range' ></span>
+        <div id='beds-slider' ></div>
+      </div>
+
+      <div class="hidden">
         <input id="min-price-input" />
-      </div>
-      <div>
-        max price:
         <input id="max-price-input" />
-      </div>
-      <div>
-        min bedrooms:
         <input id="min-beds-input" />
-      </div>
-      <div>
-        max bedrooms:
         <input id="max-beds-input" />
       </div>
 

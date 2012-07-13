@@ -23,3 +23,7 @@ body {
   color: white;
   -webkit-border-radius: 10px;
 }
+
+.hidden {
+  display: none;
+}
