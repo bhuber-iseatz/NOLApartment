@@ -40,3 +40,13 @@ body {
 .filter-slide {
   margin-top: 7px;
 }
+
+.dollars {
+  font-size: xx-large;
+  color: green;
+}
+
+.beds {
+  font-size: x-large;
+  margin-right: 2px;
+}

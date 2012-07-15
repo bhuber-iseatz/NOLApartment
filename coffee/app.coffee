@@ -1,6 +1,7 @@
 apartments = []
 markers = []
 map = null
+apartment_template = null
 MIN_PRICE = 0
 MAX_PRICE = 3000
 MIN_BEDS = 0
@@ -9,6 +10,9 @@ MAX_BEDS = 10
 $ ->
   setPrices MIN_PRICE, MAX_PRICE
   setBeds MIN_BEDS, MAX_BEDS
+
+  # grab the handlebar template
+  apartment_template = Handlebars.compile ($ '#apartment-template').html()
 
   ($ '#price-slider').slider
     range: true
@@ -52,7 +56,7 @@ mapApartments = (apartments) ->
   for apartment in apartments
     marker = new google.maps.Marker {
       position: new google.maps.LatLng apartment.latitude, apartment.longitude
-      html: '<a href="' + apartment.url + '" target="_blank">' + apartment.title + '</a>' + ' beds: ' + apartment.beds + 'price: ' + apartment.price
+      html: apartment_template apartment
     }
 
     markers.push marker

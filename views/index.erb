@@ -7,10 +7,20 @@
     <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAvIL2g56oknkfO5zsVPL5JZQvebfvl7tI&sensor=false">
     </script>
+    <script type="text/javascript" src="/handlebars-1.0.0.beta.6.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"></script>
     <script src="/apartment.js"></script>
     <script src="/app.js"></script>
+    <script id="apartment-template" type="text/x-handlebars-template" >
+      <a href="{{url}}" target="_blank">{{title}}</a>
+      <div>
+        {{#if price}}
+        <span class="dollars">${{price}}</span>
+        {{/if}}
+        <span class="beds">{{beds}}</span><span>beds</span>
+      </div>
+    </script>
   </head>
   <body>
     <div id="filters">
