@@ -1,5 +1,4 @@
 require 'mongo'
-require 'json'
 
 module Apartments
   def self.all
