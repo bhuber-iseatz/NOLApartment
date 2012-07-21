@@ -4,6 +4,6 @@ gem 'sinatra'
 gem 'nokogiri'
 gem 'feedzirra'
 gem 'geocoder'
-gem 'redis'
+gem 'mongo'
 gem 'json'
 

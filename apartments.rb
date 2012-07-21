@@ -1,20 +1,21 @@
-require 'redis'
+require 'mongo'
 require 'json'
 
 module Apartments
-  KEY = 'apartments'
-
   def self.all
-    self.store.smembers(KEY).map do |member|
-      JSON.parse member
-    end
+    # TODO find the correct way to do this.
+    self.collection.find.select { true }
   end
 
   def self.add(apt)
-    self.store.sadd(KEY, apt.to_json)
+    self.collection.insert apt
   end
 
-  def self.store
-    @@redis ||= Redis.new
+  def self.db
+    @@db ||= Mongo::Connection.new.db 'nolapartment'
+  end
+
+  def self.collection
+    @@store ||= self.db.collection 'apartments'
   end
 end
