@@ -7,7 +7,10 @@ module Apartments
   end
 
   def self.add(apt)
-    self.collection.insert apt
+    # kinda ghetto
+    unless self.collection.find_one('url' => apt['url'])
+      self.collection.insert apt
+    end
   end
 
   def self.db
