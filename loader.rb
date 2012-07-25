@@ -86,3 +86,5 @@ class Loader
   end
 end
 
+Loader.run
+
