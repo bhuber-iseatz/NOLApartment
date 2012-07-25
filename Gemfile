@@ -6,4 +6,4 @@ gem 'feedzirra'
 gem 'geocoder'
 gem 'mongo'
 gem 'json'
-
+gem 'rufus-scheduler'

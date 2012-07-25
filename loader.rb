@@ -57,28 +57,32 @@ class CraigsListAd
   end
 end
 
+class Loader
+  def self.run
+    feed = Feedzirra::Feed.fetch_and_parse('neworleans.craigslist.org/apa/index.rss')
 
-feed = Feedzirra::Feed.fetch_and_parse('neworleans.craigslist.org/apa/index.rss')
+    feed.entries.map do |entry|
+      puts "parsing: #{entry.url}"
+      ad = CraigsListAd.new
+      ad.parse(entry.url)
+      puts "geocoding: #{ad.address}"
+      ad.geocode!
+      puts "lat/long: #{ad.latitude}, #{ad.longitude}"
+      puts "beds #{ad.beds}"
+      puts "price #{ad.price}"
 
-feed.entries.map do |entry|
-  puts "parsing: #{entry.url}"
-  ad = CraigsListAd.new
-  ad.parse(entry.url)
-  puts "geocoding: #{ad.address}"
-  ad.geocode!
-  puts "lat/long: #{ad.latitude}, #{ad.longitude}"
-  puts "beds #{ad.beds}"
-  puts "price #{ad.price}"
-
-  if ad.latitude && ad.longitude
-    Apartments.add({
-      'url' => entry.url,
-      'title' => entry.title,
-      'published' => entry.published,
-      'beds' => ad.beds,
-      'price' => ad.price,
-      'latitude' => ad.latitude,
-      'longitude' => ad.longitude
-    })
+      if ad.latitude && ad.longitude
+        Apartments.add({
+          'url' => entry.url,
+          'title' => entry.title,
+          'published' => entry.published,
+          'beds' => ad.beds,
+          'price' => ad.price,
+          'latitude' => ad.latitude,
+          'longitude' => ad.longitude
+        })
+      end
+    end
   end
 end
+
