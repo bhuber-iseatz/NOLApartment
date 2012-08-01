@@ -55,8 +55,8 @@ class CraigsListAd
       @beds = $~[:beds]
     end
 
-    if body =~/\$(?<price>\d+)/
-      @price = $~[:price]
+    if body =~/\$(?<price>\d+(,\d*)?)/
+      @price = $~[:price].gsub(',', '')
     end
   end
 
