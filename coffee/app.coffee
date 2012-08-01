@@ -6,10 +6,13 @@ MIN_PRICE = 0
 MAX_PRICE = 3000
 MIN_BEDS = 0
 MAX_BEDS = 10
+MIN_DAYS = 0
+MAX_DAYS = 7
 
 $ ->
   setPrices MIN_PRICE, MAX_PRICE
   setBeds MIN_BEDS, MAX_BEDS
+  setDays MAX_DAYS
 
   # grab the handlebar template
   apartment_template = Handlebars.compile ($ '#apartment-template').html()
@@ -32,6 +35,14 @@ $ ->
     slide: (event, ui) ->
       setBeds ui.values[0], ui.values[1]
 
+  ($ '#days-slider').slider
+    min: MIN_DAYS
+    max: MAX_DAYS
+    step: 1
+    value: +($ '#days-input').val()
+    slide: (event, ui) ->
+      setDays ui.value
+
   mapOptions = {
     center: ( new google.maps.LatLng 29.9728, -90.05902 ),
     zoom: 13,
@@ -49,7 +60,8 @@ $ ->
     max_price = ($ '#max-price-input').val()
     min_beds = ($ '#min-beds-input').val()
     max_beds = ($ '#max-beds-input').val()
-    mapApartments ( findApartments min_price, max_price, min_beds, max_beds )
+    days = ($ '#days-input').val()
+    mapApartments ( findApartments min_price, max_price, min_beds, max_beds, days )
 
 mapApartments = (apartments) ->
   clearMarkers()
@@ -74,7 +86,7 @@ clearMarkers = ->
     marker.setMap null
   markers = []
 
-findApartments = (min_price, max_price, min_beds, max_beds) ->
+findApartments = (min_price, max_price, min_beds, max_beds, days) ->
   matchingApartment = (a) ->
     result = true
 
@@ -82,6 +94,7 @@ findApartments = (min_price, max_price, min_beds, max_beds) ->
     result = result && a.price <= +max_price if max_price && +max_price < MAX_PRICE
     result = result && a.beds >= +min_beds if min_beds && +min_beds > MIN_BEDS
     result = result && a.beds <= +max_beds if max_beds && +max_beds < MAX_BEDS
+    result = result && a.daysSincePosted() <= +days if days && +days < MAX_DAYS
 
     result
 
@@ -101,3 +114,9 @@ setBeds = (min_beds, max_beds) ->
   max_beds += '+' if max_beds >= MAX_BEDS
   ($ '#beds-range').html min_beds + ' - ' + max_beds
 
+setDays = (days) ->
+  ($ '#days-input').val days
+  dayText = days
+  dayText += '+' if days >= MAX_DAYS
+  dayText += ' days'
+  ($ '#days').html dayText

@@ -5,8 +5,14 @@
   Apartment = (function() {
 
     function Apartment(_arg) {
-      this.url = _arg.url, this.title = _arg.title, this.published = _arg.published, this.beds = _arg.beds, this.price = _arg.price, this.latitude = _arg.latitude, this.longitude = _arg.longitude;
+      var published;
+      this.url = _arg.url, this.title = _arg.title, published = _arg.published, this.beds = _arg.beds, this.price = _arg.price, this.latitude = _arg.latitude, this.longitude = _arg.longitude;
+      this.published = new Date(published);
     }
+
+    Apartment.prototype.daysSincePosted = function() {
+      return Math.floor((new Date() - this.published) / (1000 * 60 * 60 * 24));
+    };
 
     return Apartment;
 

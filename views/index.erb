@@ -20,6 +20,9 @@
         {{/if}}
         <span class="beds">{{beds}}</span><span>beds</span>
       </div>
+      <div>
+       Posted {{daysSincePosted}} days ago. ({{published}})
+      </div>
     </script>
   </head>
   <body>
@@ -33,7 +36,13 @@
       <div class="filter">
         beds:
         <span id='beds-range' ></span>
-        <div id='beds-slider'class='filter-slide'></div>
+        <div id='beds-slider' class='filter-slide'></div>
+      </div>
+
+      <div class="filter">
+        posted in the last:
+        <span id='days'></span>
+        <div id='days-slider' class='filter-slide'></div>
       </div>
 
       <div class="hidden">
@@ -41,6 +50,7 @@
         <input id="max-price-input" />
         <input id="min-beds-input" />
         <input id="max-beds-input" />
+        <input id="days-input" />
       </div>
 
       <button id="filter" type="button" >Filter!</button>

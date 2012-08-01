@@ -6,7 +6,7 @@ require_relative 'apartments'
 
 class CraigsListAd
   attr_accessor :street0, :street1, :city, :state, :latitude, :longitude, :beds,
-    :price
+    :price, :url, :title, :published
 
   def address
     if @street0
@@ -30,8 +30,12 @@ class CraigsListAd
     self
   end
 
-  def parse(url)
-    doc = Nokogiri::HTML(open(url))
+  def parse(entry)
+    @url = entry.url
+    @title = entry.title
+    @published = entry.published
+
+    doc = Nokogiri::HTML(open(entry.url))
     doc.xpath('//comment()').each do |comment|
       case comment
       when /CLTAG xstreet0=(?<street0>.*)/
@@ -55,6 +59,18 @@ class CraigsListAd
       @price = $~[:price]
     end
   end
+
+  def to_json
+    {
+      'url' => self.url,
+      'title' => self.title,
+      'published' => self.published,
+      'beds' => self.beds,
+      'price' => self.price,
+      'latitude' => self.latitude,
+      'longitude' => self.longitude
+    }
+  end
 end
 
 class Loader
@@ -62,25 +78,14 @@ class Loader
     feed = Feedzirra::Feed.fetch_and_parse('neworleans.craigslist.org/apa/index.rss')
 
     feed.entries.map do |entry|
-      puts "parsing: #{entry.url}"
       ad = CraigsListAd.new
-      ad.parse(entry.url)
-      puts "geocoding: #{ad.address}"
+      ad.parse(entry)
       ad.geocode!
-      puts "lat/long: #{ad.latitude}, #{ad.longitude}"
-      puts "beds #{ad.beds}"
-      puts "price #{ad.price}"
+
+      puts ad.to_json
 
       if ad.latitude && ad.longitude
-        Apartments.add({
-          'url' => entry.url,
-          'title' => entry.title,
-          'published' => entry.published,
-          'beds' => ad.beds,
-          'price' => ad.price,
-          'latitude' => ad.latitude,
-          'longitude' => ad.longitude
-        })
+        Apartments.add(ad.to_json)
       end
     end
   end
